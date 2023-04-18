@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>予約フォーム</title>
+</head>
+<body>
+    <form>
+        <label for="name">名前:</label>
+        <input type="text" name="name" id="name" required><br><br>
+        <label for="email">メールアドレス:</label>
+        <input type="email" name="email" id="email" required><br><br>
+        <label for="phone">電話番号:</label>
+        <input type="tel" name="phone" id="phone" required><br><br>
+        <label for="date">予約希望日:</label>
+        <select name="date" id="date" required>
+            <option value="" disabled selected>選択してください</option>
+            <!-- 今日から1週間分の日付をプルダウンで表示する -->
+            <!-- 日付のフォーマットはYYYY-MM-DD -->
+            <?php for ($i = 0; $i < 7; $i++) { ?>
+                <option value="<?php echo date('Y-m-d', strtotime('+' . $i . ' day')); ?>">
+                    <?php echo date('Y年m月d日', strtotime('+' . $i . ' day')); ?>
+                </option>
+            <?php } ?>
+        </select><br><br>
+        <label for="note">備考:</label>
+        <textarea name="note" id="note" rows="5"></textarea><br><br>
+        <input type="submit" value="送信">
+    </form>
+
+    <script>
+        // 予約希望日のプルダウンを作成する
+        const dateSelect = document.getElementById("date");
+        const today = new Date();
+        const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+        for (let i = 0; i < 7; i++) {
+            const date = new Date(today.getTime() + i * 24 * 60 * 60 * 1000);
+            const dateString = date.toLocaleDateString('ja-JP', options);
+            const option = document.createElement("option");
+            option.text = dateString.replace(/\//g, "-");
+            option.value = option.text;
+            dateSelect.add(option);
+        }
+    </script>
+</body>
+</html>
